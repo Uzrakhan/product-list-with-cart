@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Red Hat Text',sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    background-color: blanchedalmond;
+    color: #333;
+}
+
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 100vh;
+
+}
+
+.product-list {
+    flex: 7;
+    padding: 20px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-auto-rows: 1fr; /* Equal height rows */
+    gap: 20px;
+    background-color: blanchedalmond;
+    overflow: visible;
+}
+
+.product-list .product-card{
+    background-color: blanchedalmond;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    overflow: visible;
+}
+
+.product-card .img-wrapper{
+    position: relative;
+    aspect-ratio: 1 / 1; /* Ensure it's a square */
+    width: 85%;
+    border-radius: 5px;
+    overflow: visible;
+    border: 1.5px solid brown;
+}
+
+.product-card img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: relative;
+    border-radius: 5px;
+    border: 1px solid brown;
+}
+
+.product-card .add-to-cart {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    padding: 1px 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid brown;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 9; /* Ensure it's above other elements */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.overlay{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-card .add-to-cart svg{
+    width: 25px;
+    height: 25px;
+}
+
+
+.product-card .add-to-cart span {
+    display: flex; /* Ensure text stays in a row */
+    flex-direction: row;
+    font-size: 0.8vw; /* Adjust text size */
+    text-size-adjust: auto;
+}
+
+
+.product-card .product-info{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: left;
+    justify-content: center;
+    width: 100%; /* Ensure it spans the entire card width */
+    padding: 25px; /* Add some padding for spacing */
+}
+
+.product-info .prod-name{
+    text-align: left;
+    font-size: 1vw;
+}
+
+.product-info .prod-category{
+    font-size: 0.9vw;
+}
+
+.product-info .prod-price{
+    font-size: 1.5vw;
+    color: brown;
+    font-weight: bold;
+}
+
+
+.cart {
+    flex: 3;
+    background-color: #f5f5f5;
+    margin-right: 20px;
+}
+
