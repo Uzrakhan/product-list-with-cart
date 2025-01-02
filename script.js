@@ -1,9 +1,9 @@
 const productCards = document.querySelector('.product-card');
-const addToCartBtn = document.querySelector('.add-to-cart');
 const productList = document.getElementById('product-list');
 const cartSection = document.querySelector('.cart-section');
 const productContainer = document.querySelector('.product-container');
-
+const cartContainer = document.getElementById('cart-container');
+const cartList = document.getElementById('cart-list');
 
 const products = [
     {   
@@ -147,17 +147,70 @@ class shoppingCart{
 
     addItem(id){
         const product = products.find((item) => item.id === id);
+        const {name,price} = product;
 
         if(!product) return;
 
         this.items.push(product);
         this.renderCart();
+
+        
     }
 
     renderCart(){
-        productContainer.innerHTML = '';
+        cartList.innerHTML = '';
+
+        const totalCountPerProduct = {};
+        this.items.forEach((dessert) => {
+            totalCountPerProduct[dessert.id] = (totalCountPerProduct[dessert.id] || 0) + 1;
+        });
+
+
+        this.items.forEach((product) => {
+            const count = totalCountPerProduct[product.id];
+        });
+
+        this.total = this.items.reduce((acc, item) => acc + item.price, 0);
+
+        const cartHeader = document.querySelector('#cart h3');
+        cartHeader.textContent = 'Your Cart';
+
+        this.items.forEach((product) => {
+            const count = totalCountPerProduct[product.id];
+            if(count > 1) {
+                cartHeader.textContent += `Your Cart (${count}x)`;
+                cartList.innerHTML += `
+                  <div class="product-list">
+                    <div class="cart-items">
+                        <h5 class="item-name">${product.name}</h5>
+                        <p class="item-count">${count}x</p>
+                        <p class="item-subtotal">@${subTotal.toFixed(2)}</p>
+                        <p class="item-total">${this.total.toFixed(2)}</p>
+                    </div>
+                    <br>
+                </div>
+                `
+            } 
+        })
+
+        cartList.innerHTML += `
+               <p class="cart-total">Order Total: ${cartTotal.toFixed(2)}</p>
+               <br>
+               <p>This is a carbon-friendly delivery.</p>
+               <button>Checkout</button></p>
+        `;
+    
+
     }
+ 
 
 
 }
 
+const cart = new shoppingCart();
+const addToCartBtns = document.getElementsByClassName('add-to-cart');
+[...addToCartBtns].forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+        cart.addItem(Number(event.target.id),products);
+    })
+})
