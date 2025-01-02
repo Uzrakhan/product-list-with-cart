@@ -147,70 +147,66 @@ class shoppingCart{
 
     addItem(id){
         const product = products.find((item) => item.id === id);
-        const {name,price} = product;
 
         if(!product) return;
 
         this.items.push(product);
         this.renderCart();
 
-        
     }
 
-    renderCart(){
-        cartList.innerHTML = '';
-
-        const totalCountPerProduct = {};
-        this.items.forEach((dessert) => {
-            totalCountPerProduct[dessert.id] = (totalCountPerProduct[dessert.id] || 0) + 1;
-        });
-
-
-        this.items.forEach((product) => {
-            const count = totalCountPerProduct[product.id];
-        });
-
-        this.total = this.items.reduce((acc, item) => acc + item.price, 0);
-
-        const cartHeader = document.querySelector('#cart h3');
-        cartHeader.textContent = 'Your Cart';
-
-        this.items.forEach((product) => {
-            const count = totalCountPerProduct[product.id];
-            if(count > 1) {
-                cartHeader.textContent += `Your Cart (${count}x)`;
-                cartList.innerHTML += `
-                  <div class="product-list">
-                    <div class="cart-items">
-                        <h5 class="item-name">${product.name}</h5>
-                        <p class="item-count">${count}x</p>
-                        <p class="item-subtotal">@${subTotal.toFixed(2)}</p>
-                        <p class="item-total">${this.total.toFixed(2)}</p>
-                    </div>
-                    <br>
-                </div>
-                `
-            } 
-        })
-
-        cartList.innerHTML += `
-               <p class="cart-total">Order Total: ${cartTotal.toFixed(2)}</p>
-               <br>
-               <p>This is a carbon-friendly delivery.</p>
-               <button>Checkout</button></p>
-        `;
+    renderCart() {
+        console.log(this.items); // Check if items are being added or removed correctly
     
-
+        const cartHeader = document.querySelector('#cart-container h3');
+        const cartList = document.getElementById('cart-list');
+    
+        // Object to track product count
+        const productCounts = this.items.reduce((counts, product) => {
+            if (!counts[product.id]) {
+                counts[product.id] = { ...product, count: 0 };
+            }
+            counts[product.id].count += 1;
+            return counts;
+        }, {});
+    
+        this.total = this.items.reduce((total, item) => total + item.price, 0);
+    
+        const totalItems = Object.values(productCounts).reduce((sum, prod) => sum + prod.count, 0);
+        cartHeader.textContent = `Your Cart (${totalItems}x)`;
+    
+        cartList.innerHTML = ''; // Clear previous content
+    
+        if (totalItems === 0) {
+            cartList.innerHTML = '<p>Your cart is empty.</p>';
+        } else {
+            Object.values(productCounts).forEach((product) => {
+                const subTotal = product.price * product.count;
+                cartList.innerHTML += `
+                   <div class="cart-item">
+                      <h5>${product.name}</h5>
+                      <p>${product.count}x</p>
+                      <p>@${product.price.toFixed(2)}</p>
+                      <p>${subTotal.toFixed(2)}</p>
+                   </div>
+                `;
+            });
+    
+            cartList.innerHTML += `
+                <div class="cart-summary">
+                    <p><strong>Order Total: ${this.total.toFixed(2)}</strong></p>
+                </div>
+            `;
+        }
     }
- 
-
-
 }
 
 const cart = new shoppingCart();
 const addToCartBtns = document.getElementsByClassName('add-to-cart');
 [...addToCartBtns].forEach((btn) => {
     btn.addEventListener('click', (event) => {
-        cart.addItem(Number(event.target.id),products);
+        const button = event.target.closest('button');
+        if(!button) return;
+        cart.addItem(Number(button.id));
     })
 })
